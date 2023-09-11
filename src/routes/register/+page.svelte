@@ -60,3 +60,21 @@
     <button style="color: blue;"  on:click={handleclick}  >Signup</button>
   </div>
 </form>
+
+
+<style>
+	.form {
+	  margin-left: 550px;
+	  width: 500px;
+	 height: 400PX;
+   margin-top: 100px;
+ 
+	 
+	}
+
+	.mb-6 {
+ 
+   border-radius: 1.25rem; 
+}
+	
+  </style>

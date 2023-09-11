@@ -35,26 +35,47 @@
 
 
 <form on:submit={handleSubmit} class="form">
+ 
   <div class="mb-6">
     <Label for="email" class="form-label">Email:</Label>
-    <Input type="email" bind:value={email} required id="email" class="form-input" />
+    <Input type="email" bind:value={email} required id="email" class="form-input"  />
   </div>
   <div class="mb-6">
     <Label for="password" class="form-label">Password:</Label>
     <Input type="password" bind:value={password} required id="password" class="form-input" />
   </div>
-  <div>
+  <div class="mb-6" >
     
     <button style="color: blue;" on:click={handleclick} >Login</button>
   </div>
- 
-</form>
+
+  <div class="mb-6" >
+  <p>Please create an account after click on Register , if you don't have.</p>
+ <a href="/register" style="color: blue;">Register</a>
+ </div>
+  </form>
+
 
 {#if errorMessage}
   <p style="color: red;">{errorMessage}</p>
 {/if}
 
-<p>Please create an account after click on Register , if you don't have.</p>
-<a href="/register" style="color: blue;">Register</a>
 
 
+
+<style>
+	.form {
+	  margin-left: 550px;
+	  width: 500px;
+	 height: 400PX;
+   margin-top: 100px;
+ 
+	 
+	}
+
+	.mb-6 {
+ 
+   border-radius: 1.25rem; 
+}
+	
+  </style>
