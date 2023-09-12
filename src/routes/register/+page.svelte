@@ -13,6 +13,7 @@
   let firstName = "";
   let lastName = "";
  let errorMessage = ""; 
+ let showPassword = false; // Track whether to show the password
 
   async function handleSubmit() {
     try {
@@ -31,11 +32,14 @@
 
   const handleclick = () => {
     // Only allow clicking when there are no errors
-    if (!errorMessage) {
+   
       handleSubmit();
-    }
+    
   }
-  
+  const togglePasswordVisibility = () => {
+    // Toggle the password visibility
+    showPassword = !showPassword;
+  }
 </script>
 
 <h1  style="color: blue;" class="h1" >Sign Up</h1>
@@ -54,9 +58,27 @@
     <Label for="email" class="form-label">Email:</Label>
     <Input type="email" bind:value={email} required id="email" placeholder="Enter Email" class="form-input" />
   </div>
+
   <div class="mb-6">
-    <Label for="password" class="form-label">Password:</Label>
-    <Input type="password" bind:value={password} required id="password" placeholder="Enter Password" class="form-input" />
+    <div class="password-container">
+      <Label for="password" class="form-label">Password:</Label>
+      <Input
+        type={showPassword ? "text" : "password"} 
+        bind:value={password}
+        required
+        id="password"
+        placeholder="Enter Password"
+        class="form-input"
+      />
+      <label class="password-toggle">
+        <input
+          type="checkbox"
+          checked={showPassword}
+          on:change={togglePasswordVisibility}
+        />
+        Show Password
+      </label>
+    </div>
   </div>
   <div>
     <button  type="button" on:click={handleclick} >Signup</button>
