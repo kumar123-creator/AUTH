@@ -14,10 +14,12 @@
   });
 </script>
 
-<h1 style="color: {isBlue ? 'blue' : 'green'};" class="h1">Welcome</h1>
+
+<h1 style="color: darkgreen;" >congratulations! you successfully login into Your account.</h1>
+<h2 style="color: {isBlue ? 'blue' : 'Orange'};" class="h2">Welcome</h2>
 
 <style>
-  .h1 {
+  .h2 {
     margin-left: 600px;
     margin-top: 195px;
     font-weight: bold;
