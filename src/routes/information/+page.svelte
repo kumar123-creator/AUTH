@@ -15,14 +15,22 @@
 </script>
 
 
-<h1 style="color: darkgreen;" >congratulations! you successfully login into Your account.</h1>
-<h2 style="color: {isBlue ? 'blue' : 'Orange'};" class="h2">Welcome</h2>
+<h1 class="h1" style="color: darkgreen;" >congratulations! you successfully sign in into Your account.Please goto Login page.</h1>
+<a href="/" style="color: blue;  font-weight: bold; font-size:18px; " class="h2">Login</a>
 
 <style>
   .h2 {
-    margin-left: 600px;
-    margin-top: 195px;
+    margin-left: 10px;
+    margin-top: 185px;
     font-weight: bold;
     font-size: 70px;
   }
+
+  .h1{
+    margin-left: 10px;
+    margin-top: 195px;
+    font-weight:normal;
+    font-size: 20px;
+  }
+
 </style>

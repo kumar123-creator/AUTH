@@ -30,9 +30,20 @@ async function handleSubmit() {
      }
 
      // If the email is not in use, proceed with creating the account
-     await createUserWithEmailAndPassword(auth, email, password);
-     goto('/information');
-     alert("Signed up successfully!");
+       // If the email is not in use and password is valid, proceed with creating the account
+       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+     const user = userCredential.user;
+
+     // Store the registered email and password for display
+     const registeredEmail = user.email;
+     const registeredPassword = password;
+
+     goto('/information', {
+       state: {
+         registeredEmail,
+         registeredPassword,
+       },
+     });
 
      console.log("User signed up successfully!");
      console.log("First Name:", firstName);

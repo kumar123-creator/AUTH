@@ -18,7 +18,7 @@
       errorMessage = "";
     
       // Navigate to the /information route after successful login
-      goto('/information');
+      goto('/Welcomepage');
     } catch (error) {
       // Display error message if login fails
       errorMessage = "Invalid username or password.";
