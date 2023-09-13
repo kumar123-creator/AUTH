@@ -3,8 +3,9 @@
   import { onMount } from 'svelte';
   import { auth } from '$lib/firebase/firebase.js'; // Import your Firebase auth instance
   import { goto } from '$app/navigation'; // Import the goto function from SvelteKit
+  import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
+  let users = [];
 
-  import { onAuthStateChanged } from "firebase/auth";
 
   let email = ''; // Define email in a scope accessible to the entire script
   
@@ -41,29 +42,62 @@
       });
     }
   }
+ 
 
-  onAuthStateChanged(auth, (user) => {
-      if (user) {
-          // User is signed in
-          email = user.email; // Update the email variable with the user's email
-          const uid = user.uid;
-          console.log(email);
-          console.log(uid);
-          // ...
-      } else {
-         
-      }
-  });
+
+
+onMount(() => {
+// Fetch the user data from Firebase Authentication
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    // User is signed in
+    const userData = {
+      email: user.email,
+      createdAt: user.metadata.creationTime,
+      lastSignIn: user.metadata.lastSignInTime,
+      uid: user.uid,
+    };
+    users = [...users, userData];
+  } else {
+    // User is signed out
+    console.log('User is signed out');
+  }
+});
+});
 </script>
+<main>
 
 <h1 class="h1" style="color: darkgreen;">Congratulations! You successfully logged into your account.</h1>
-<button class="button" type="button" on:click={handleLogout}>Logout</button>
-<h2 style="color: {isBlue ? 'blue' : 'orange'};" class="h2">Welcome {email}</h2>
+<h2 style="color: {isBlue ? 'green' : 'orange'};" class="h2">Welcome {email}</h2>
 
+
+
+<Table  color="blue" hoverable={true} >
+<TableHead >
+  <TableHeadCell>Email</TableHeadCell>
+  <TableHeadCell>Created At</TableHeadCell>
+  <TableHeadCell>last SignIn</TableHeadCell>
+  <TableHeadCell>UID</TableHeadCell>
+</TableHead>
+<tbody>
+  {#each users as user}
+
+  <TableBodyRow>
+    <TableBodyCell>{user.email}</TableBodyCell>
+    <TableBodyCell>{user.createdAt}</TableBodyCell>
+    <TableBodyCell>{user.lastSignIn}</TableBodyCell>
+    <TableBodyCell>{user.uid}</TableBodyCell>
+  </TableBodyRow>
+
+  {/each}
+</tbody>
+</Table>
+<button class="button" type="button" on:click={handleLogout}>Logout</button>
+</main>
 <style>
   .h2 {
-    margin-left: 400px;
-    margin-top: 195px;
+    margin-left: 600px;
+    margin-top: 205px;
     font-weight: bold;
     font-size: 50px;
   }
@@ -74,8 +108,8 @@
     font-size: 20px;
   }
   .button {
-    margin-left: 1300px;
-    margin-top: -20px;
+    margin-left:5px;
+    margin-top: 30px;
     background-color: #ed161a;
     color: white;
     padding: 10px 15px;
