@@ -1,70 +1,82 @@
 
-
 <script>
   import { auth } from '$lib/firebase/firebase.js';
- import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
- import { Input, Label, Helper } from 'flowbite-svelte';
- import { goto } from '$app/navigation';
+  import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
+  import { Input, Label, Helper } from 'flowbite-svelte';
+  import { goto } from '$app/navigation';
+  import { getDatabase, ref, set } from 'firebase/database'; // Import set function from Firebase Realtime Database
 
+  let email = "";
+  let password = "";
+  let firstName = "";
+  let lastName = "";
+  let errorMessage = "";
+  let showPassword = false; // Track whether to show the password
 
- let email = "";
- let password = "";
- let firstName = "";
- let lastName = "";
-let errorMessage = ""; 
-let showPassword = false; // Track whether to show the password
+  async function handleSubmit() {
+    try {
+      // Check if the email is already in use
+      const signInMethods = await fetchSignInMethodsForEmail(auth, email);
 
-async function handleSubmit() {
-   try {
-     // Check if the email is already in use
-     const signInMethods = await fetchSignInMethodsForEmail(auth, email);
-     
-     if (signInMethods.length > 0) {
-       // Email is already in use
-       errorMessage = "Email is already in use. Please use a different email.";
-       return;
-     }
-     if (password.length < 6) {
-       errorMessage = "Password must be at least 6 characters long.";
-       return;
-     }
+      if (signInMethods.length > 0) {
+        // Email is already in use
+        errorMessage = "Email is already in use. Please use a different email.";
+        return;
+      }
+      if (password.length < 6) {
+        errorMessage = "Password must be at least 6 characters long.";
+        return;
+      }
 
-     // If the email is not in use, proceed with creating the account
-       // If the email is not in use and password is valid, proceed with creating the account
-       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-     const user = userCredential.user;
+      // If the email is not in use and password is valid, proceed with creating the account
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-     // Store the registered email and password for display
-     const registeredEmail = user.email;
-     const registeredPassword = password;
+      // Store the registered email and password for display
+      const registeredEmail = user.email;
+      const registeredPassword = password;
 
-     goto('/information', {
-       state: {
-         registeredEmail,
-         registeredPassword,
-       },
-     });
+      // Save user registration data to Firebase Realtime Database
+      const db = getDatabase(); // Initialize the database
+      const usersRef = ref(db, 'users'); // Reference to a "users" node in the database
 
-     console.log("User signed up successfully!");
-     console.log("First Name:", firstName);
-     console.log("Last Name:", lastName);
-   } catch (error) {
-     console.error("Error signing up:", error.message);
-   }
- }
+      // Create a new user object with the registration data
+      const newUser = {
+        email: registeredEmail,
+        password: registeredPassword,
+        firstName,
+        lastName,
+      };
 
+      // Set the data in the database
+      set(usersRef, newUser);
 
- const handleclick = () => {
-   // Only allow clicking when there are no errors
-  
-     handleSubmit();
-   
- }
- const togglePasswordVisibility = () => {
-   // Toggle the password visibility
-   showPassword = !showPassword;
- }
+      goto('/information', {
+        state: {
+          registeredEmail,
+          registeredPassword,
+        },
+      });
+
+      console.log("User signed up successfully!");
+      console.log("First Name:", firstName);
+      console.log("Last Name:", lastName);
+    } catch (error) {
+      console.error("Error signing up:", error.message);
+    }
+  }
+
+  const handleclick = () => {
+    // Only allow clicking when there are no errors
+    handleSubmit();
+  }
+
+  const togglePasswordVisibility = () => {
+    // Toggle the password visibility
+    showPassword = !showPassword;
+  }
 </script>
+
 
 <h1  style="color: blue;" class="h1" >Sign Up</h1>
 <p class="p1" >Please fill in this form to create an account.</p>
