@@ -58,8 +58,21 @@
       if (snapshot.exists()) {
         // Convert the snapshot value to an array of users
         const userData = snapshot.val();
-        const userList = Object.keys(userData).map((key) => userData[key]);
-        users = userList;
+
+        // Iterate through the unique keys and extract user data
+        const userList = Object.keys(userData).map((key) => {
+          const user = userData[key];
+          return {
+            email: user.email || 'N/A',
+            firstName: user.firstName || 'N/A',
+            lastName: user.lastName || 'N/A',
+          };
+        });
+
+        // Filter out entries with N/A for all fields
+        users = userList.filter((user) => {
+          return user.email !== 'N/A' || user.firstName !== 'N/A' || user.lastName !== 'N/A';
+        });
       } else {
         // Handle the case where there is no data
         console.log('No user data in the database.');
