@@ -3,7 +3,7 @@
   import { auth } from '$lib/firebase/firebase.js';
   import { goto } from '$app/navigation';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
-  import { getDatabase, ref, onValue } from 'firebase/database'; // Import Firebase Realtime Database functions
+  import { getDatabase, ref, onValue, remove } from 'firebase/database'; // Import Firebase Realtime Database functions
 
   let users = [];
 
@@ -31,6 +31,26 @@
       }).catch((error) => {
         console.error("Logout error:", error);
       });
+    }
+  }
+
+  // Function to delete a user
+  function deleteUser(user) {
+    const confirmDelete = window.confirm(`Are you sure you want to delete ${user.email}?`);
+
+    if (confirmDelete) {
+      // Remove the user from the backend Firebase Realtime Database
+      const db = getDatabase();
+      const userRef = ref(db, `users/${user.key}`); // Assuming each user has a unique key
+
+      remove(userRef).then(() => {
+        console.log(`User ${user.email} deleted from database.`);
+      }).catch((error) => {
+        console.error("Delete error:", error);
+      });
+
+      // Remove the user from the users array in the frontend
+      users = users.filter((u) => u !== user);
     }
   }
 
@@ -62,10 +82,12 @@
         // Iterate through the unique keys and extract user data
         const userList = Object.keys(userData).map((key) => {
           const user = userData[key];
+          user.key = key; // Store the unique key in the user object
           return {
             email: user.email || 'N/A',
             firstName: user.firstName || 'N/A',
             lastName: user.lastName || 'N/A',
+            key: key,
           };
         });
 
@@ -85,11 +107,12 @@
   <h1 class="h1" style="color: darkgreen;">Congratulations! You successfully logged into your account.</h1>
   <h2 style="color: {isBlue ? 'green' : 'orange'};" class="h2">Welcome {email}</h2>
 
-  <Table  hoverable={true}>
+  <Table hoverable={true}>
     <TableHead>
       <TableHeadCell>Email</TableHeadCell>
       <TableHeadCell>First Name</TableHeadCell>
       <TableHeadCell>Last Name</TableHeadCell>
+      <TableHeadCell>Actions</TableHeadCell> <!-- Add a new column for the delete button -->
     </TableHead>
     <tbody>
       {#each users as user}
@@ -97,6 +120,9 @@
           <TableBodyCell>{user.email}</TableBodyCell>
           <TableBodyCell>{user.firstName}</TableBodyCell>
           <TableBodyCell>{user.lastName}</TableBodyCell>
+          <TableBodyCell>
+            <button class="button" on:click={() => deleteUser(user)}>Delete</button>
+          </TableBodyCell>
         </TableBodyRow>
       {/each}
     </tbody>
@@ -118,8 +144,6 @@
     font-size: 20px;
   }
   .button {
-    margin-left: 5px;
-    margin-top: 30px;
     background-color: #ed161a;
     color: white;
     padding: 10px 15px;
