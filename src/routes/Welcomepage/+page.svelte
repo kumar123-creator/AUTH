@@ -1,17 +1,14 @@
-
 <script>
   import { onMount } from 'svelte';
-  import { auth } from '$lib/firebase/firebase.js'; // Import your Firebase auth instance
-  import { goto } from '$app/navigation'; // Import the goto function from SvelteKit
+  import { auth } from '$lib/firebase/firebase.js';
+  import { goto } from '$app/navigation';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
+  import { getDatabase, ref, onValue } from 'firebase/database'; // Import Firebase Realtime Database functions
+
   let users = [];
 
-
-  let email = ''; // Define email in a scope accessible to the entire script
-  
- 
-
-  let isBlue = true; 
+  let email = '';
+  let isBlue = true;
 
   onMount(() => {
     // Create an interval to toggle the color every 2 seconds
@@ -25,75 +22,74 @@
 
   // Function to handle logout
   function handleLogout() {
-    // Display a confirmation dialog
     const confirmLogout = window.confirm("Are you sure you want to logout?");
-    
+
     if (confirmLogout) {
-      // User confirmed, proceed with logout
-      // You can use your Firebase auth instance to sign the user out
-      // For example:
       auth.signOut().then(() => {
-        // Handle successful logout, e.g., navigate to the /information page
         console.log("User logged out");
-        goto('/'); // Navigate to the /information route
+        goto('/');
       }).catch((error) => {
-        // Handle logout error, if any
         console.error("Logout error:", error);
       });
     }
   }
- 
 
+  onMount(() => {
+    // Fetch the user data from Firebase Authentication
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        const userData = {
+          email: user.email,
+          firstname: user.firstName,
+          lastName: user.lastName,
+        };
+        users = [...users, userData];
+      } else {
+        console.log('User is signed out');
+      }
+    });
 
+    // Fetch data from Firebase Realtime Database
+    const db = getDatabase();
+    const usersRef = ref(db, 'users');
 
-onMount(() => {
-// Fetch the user data from Firebase Authentication
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    // User is signed in
-    const userData = {
-      email: user.email,
-      createdAt: user.metadata.creationTime,
-      lastSignIn: user.metadata.lastSignInTime,
-      uid: user.uid,
-    };
-    users = [...users, userData];
-  } else {
-    // User is signed out
-    console.log('User is signed out');
-  }
-});
-});
+    onValue(usersRef, (snapshot) => {
+      if (snapshot.exists()) {
+        // Convert the snapshot value to an array of users
+        const userData = snapshot.val();
+        const userList = Object.keys(userData).map((key) => userData[key]);
+        users = userList;
+      } else {
+        // Handle the case where there is no data
+        console.log('No user data in the database.');
+      }
+    });
+  });
 </script>
+
 <main>
+  <h1 class="h1" style="color: darkgreen;">Congratulations! You successfully logged into your account.</h1>
+  <h2 style="color: {isBlue ? 'green' : 'orange'};" class="h2">Welcome {email}</h2>
 
-<h1 class="h1" style="color: darkgreen;">Congratulations! You successfully logged into your account.</h1>
-<h2 style="color: {isBlue ? 'green' : 'orange'};" class="h2">Welcome {email}</h2>
-
-
-
-<Table  color="blue" hoverable={true} >
-<TableHead >
-  <TableHeadCell>Email</TableHeadCell>
-  <TableHeadCell>Created At</TableHeadCell>
-  <TableHeadCell>last SignIn</TableHeadCell>
-  <TableHeadCell>UID</TableHeadCell>
-</TableHead>
-<tbody>
-  {#each users as user}
-
-  <TableBodyRow>
-    <TableBodyCell>{user.email}</TableBodyCell>
-    <TableBodyCell>{user.createdAt}</TableBodyCell>
-    <TableBodyCell>{user.lastSignIn}</TableBodyCell>
-    <TableBodyCell>{user.uid}</TableBodyCell>
-  </TableBodyRow>
-
-  {/each}
-</tbody>
-</Table>
-<button class="button" type="button" on:click={handleLogout}>Logout</button>
+  <Table color="blue" hoverable={true}>
+    <TableHead>
+      <TableHeadCell>Email</TableHeadCell>
+      <TableHeadCell>First Name</TableHeadCell>
+      <TableHeadCell>Last Name</TableHeadCell>
+    </TableHead>
+    <tbody>
+      {#each users as user}
+        <TableBodyRow>
+          <TableBodyCell>{user.email}</TableBodyCell>
+          <TableBodyCell>{user.firstName}</TableBodyCell>
+          <TableBodyCell>{user.lastName}</TableBodyCell>
+        </TableBodyRow>
+      {/each}
+    </tbody>
+  </Table>
+  <button class="button" type="button" on:click={handleLogout}>Logout</button>
 </main>
+
 <style>
   .h2 {
     margin-left: 600px;
@@ -108,7 +104,7 @@ auth.onAuthStateChanged((user) => {
     font-size: 20px;
   }
   .button {
-    margin-left:5px;
+    margin-left: 5px;
     margin-top: 30px;
     background-color: #ed161a;
     color: white;
