@@ -71,7 +71,7 @@
   <h1 class="h1" style="color: darkgreen;">Congratulations! You successfully logged into your account.</h1>
   <h2 style="color: {isBlue ? 'green' : 'orange'};" class="h2">Welcome {email}</h2>
 
-  <Table color="blue" hoverable={true}>
+  <Table  hoverable={true}>
     <TableHead>
       <TableHeadCell>Email</TableHeadCell>
       <TableHeadCell>First Name</TableHeadCell>
