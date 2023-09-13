@@ -1,153 +1,212 @@
+
 <script>
-  import { onMount } from 'svelte';
+  import { onMount } from "svelte";
   import { auth } from '$lib/firebase/firebase.js';
-  import { goto } from '$app/navigation';
-  import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
-  import { getDatabase, ref, onValue, remove } from 'firebase/database'; // Import Firebase Realtime Database functions
+ import { goto } from '$app/navigation';
 
-  let users = [];
+ 
+ let jsonData = [];
+ let gridData = [];
+ 
+ onMount(async () => {
+   const response = await fetch(
+     "https://api.recruitly.io/api/candidate?apiKey=TEST9349C0221517DA4942E39B5DF18C68CDA154"
+   );
+   const responseData = await response.json();
+   jsonData = responseData.data;
+ 
+   gridData = jsonData.map((item) => ({
+     id: item.id,
+     firstName: item.firstName,
+     surname: item.surname,
+     email: item.email,
+     mobile: item.mobile,
+   }));
+ 
+   const dataGrid = new DevExpress.ui.dxDataGrid(document.getElementById("dataGrid"), {
+     dataSource: gridData,
+     columns: [
+       { dataField: "id", caption: "ID", width: 250 },
+       { dataField: "firstName", caption: "Full Name", width: 200 },
+       { dataField: "surname", caption: "Surname", width: 200 },
+       { dataField: "email", caption: "Email", width: 200 },
+       { dataField: "mobile", caption: "Mobile", width: 150 },
+       // Define other columns as needed
+     ],
+     showBorders: true,
+     filterRow: {
+       visible: true,
+     },
+     editing: {
+       allowDeleting: true,
+       allowAdding: true,
+       allowUpdating: true,
+       mode: "popup",
+       form: {
+         labelLocation: "top",
+       },
+       popup: {
+         showTitle: true,
+         
+       },
+       texts: {
+         saveRowChanges: "Save",
+         cancelRowChanges: "Cancel",
+         deleteRow: "Delete",
+         confirmDeleteMessage: "Are you sure you want to delete this record?",
+       },
+     },
+     paging: {
+       pageSize: 10,
+     },
+     onRowInserting: async (e) => {
+       console.log("Data being sent to API:", e.data);
+       try {
+         const response = await fetch(
+           "https://api.recruitly.io/api/candidate?apiKey=TEST27306FA00E70A0F94569923CD689CA9BE6CA",
+           {
+             method: "POST",
+             headers: {
+               "Content-Type": "application/json",
+             },
+             body: JSON.stringify(e.data),
+           }
+         );
+ 
+         const responseData = await response.json();
+         if (response.ok) {
+           e.data.firstName = responseData.firstName;
+           gridData.push(e.data);
+           dataGrid.refresh();
+         } else {
+           console.error("Failed to add record:", responseData.error);
+         }
+       } catch (error) {
+         console.error("Failed to add record:", error);
+       }
+     },
+     onRowUpdating: async (e) => {
+       try {
+         console.log(e);
+         var newData = {
+           id: e.key.id,
+           firstName: e.newData.firstName === undefined ? e.oldData.firstName : e.newData.firstName,
+           surname: e.newData.surname === undefined ? e.oldData.surname : e.newData.surname,
+           email: e.newData.email === undefined ? e.oldData.email : e.newData.email,
+           mobile: e.newData.mobile === undefined ? e.oldData.mobile : e.newData.mobile,
+         }
+ 
+         console.log(newData)
+         const response = await fetch(
+           `https://api.recruitly.io/api/candidate?apiKey=TEST9349C0221517DA4942E39B5DF18C68CDA154`,
+           {
+             method: "POST",
+             headers: {
+               "Content-Type": "application/json",
+             },
+             body: JSON.stringify(newData),
+           }
+         );
+         const responseData = await response.json();
+         if (response.ok) {
+           const updatedItemIndex = gridData.findIndex((item) => item.id === e.key);
+           gridData.push(e.newData);
+           gridData[updatedItemIndex] = e.newData;
+           dataGrid.refresh();
+         } else {
+           console.error("Failed to update record:", responseData.error);
+         }
+       } catch (error) {
+         console.error("Failed to update record:", error);
+       }
+     },
+     onRowRemoving: async (e) => {
+       console.log("Data being sent to API:", e.data);
+       try {
+         const response = await fetch(
+           `https://api.recruitly.io/api/candidate/${e.data.id}?apiKey=TEST27306FA00E70A0F94569923CD689CA9BE6CA`,
+           {
+             method: "DELETE",
+           }
+         );
+         if (response.ok) {
+           const removedItemIndex = gridData.findIndex((item) => item.id === e.key);
+           if (removedItemIndex > -1) {
+             gridData.splice(removedItemIndex, 1);
+             dataGrid.refresh();
+           }
+         } else {
+           console.error("Failed to delete record.");
+         }
+       } catch (error) {
+         console.error("Failed to delete record:", error);
+       }
+     },
+     onInitialized: () => {
+ 
+     },
+   });
+ });
+ let email = ''; // Define email in a scope accessible to the entire script
+ 
 
-  let email = '';
-  let isBlue = true;
 
-  onMount(() => {
-    // Create an interval to toggle the color every 2 seconds
-    const interval = setInterval(() => {
-      isBlue = !isBlue;
-    }, 1000);
+ let isBlue = true; 
 
-    // Clean up the interval when the component is unmounted
-    return () => clearInterval(interval);
-  });
+ onMount(() => {
+   // Create an interval to toggle the color every 2 seconds
+   const interval = setInterval(() => {
+     isBlue = !isBlue;
+   }, 1000);
 
-  // Function to handle logout
-  function handleLogout() {
-    const confirmLogout = window.confirm("Are you sure you want to logout?");
+   // Clean up the interval when the component is unmounted
+   return () => clearInterval(interval);
+ });
 
-    if (confirmLogout) {
-      auth.signOut().then(() => {
-        console.log("User logged out");
-        goto('/');
-      }).catch((error) => {
-        console.error("Logout error:", error);
-      });
-    }
-  }
+ // Function to handle logout
+ function handleLogout() {
+   // Display a confirmation dialog
+   const confirmLogout = window.confirm("Are you sure you want to logout?");
+   
+   if (confirmLogout) {
+     // User confirmed, proceed with logout
+     // You can use your Firebase auth instance to sign the user out
+     // For example:
+     auth.signOut().then(() => {
+       // Handle successful logout, e.g., navigate to the /information page
+       console.log("User logged out");
+       goto('/'); // Navigate to the /information route
+     }).catch((error) => {
+       // Handle logout error, if any
+       console.error("Logout error:", error);
+     });
+   }
+ }
 
-  // Function to delete a user
-  function deleteUser(user) {
-    const confirmDelete = window.confirm(`Are you sure you want to delete ${user.email}?`);
-
-    if (confirmDelete) {
-      // Remove the user from the backend Firebase Realtime Database
-      const db = getDatabase();
-      const userRef = ref(db, `users/${user.key}`); // Assuming each user has a unique key
-
-      remove(userRef).then(() => {
-        console.log(`User ${user.email} deleted from database.`);
-      }).catch((error) => {
-        console.error("Delete error:", error);
-      });
-
-      // Remove the user from the users array in the frontend
-      users = users.filter((u) => u !== user);
-    }
-  }
-
-  onMount(() => {
-    // Fetch the user data from Firebase Authentication
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        const userData = {
-          email: user.email,
-          firstname: user.firstName,
-          lastName: user.lastName,
-        };
-        // Prepend the new user data to the users array
-        users = [userData, ...users];
-      } else {
-        console.log('User is signed out');
-      }
-    });
-
-    // Fetch data from Firebase Realtime Database
-    const db = getDatabase();
-    const usersRef = ref(db, 'users');
-
-    onValue(usersRef, (snapshot) => {
-      if (snapshot.exists()) {
-        // Convert the snapshot value to an array of users
-        const userData = snapshot.val();
-
-        // Iterate through the unique keys and extract user data
-        const userList = Object.keys(userData).map((key) => {
-          const user = userData[key];
-          user.key = key; // Store the unique key in the user object
-          return {
-            email: user.email || 'N/A',
-            firstName: user.firstName || 'N/A',
-            lastName: user.lastName || 'N/A',
-            key: key,
-          };
-        });
-
-        // Filter out entries with N/A for all fields
-        users = userList.filter((user) => {
-          return user.email !== 'N/A' || user.firstName !== 'N/A' || user.lastName !== 'N/A';
-        });
-      } else {
-        // Handle the case where there is no data
-        console.log('No user data in the database.');
-      }
-    });
-  });
 </script>
 
+<h1 class="h1" style="color: darkgreen;">Congratulations! You successfully logged into your account.</h1>
 <main>
-  <h1 class="h1" style="color: darkgreen;">Congratulations! You successfully logged into your account.</h1>
-  <h2 style="color: {isBlue ? 'green' : 'orange'};" class="h2">Welcome {email}</h2>
-
-  <Table hoverable={true}>
-    <TableHead>
-      <TableHeadCell>Email</TableHeadCell>
-      <TableHeadCell>First Name</TableHeadCell>
-      <TableHeadCell>Last Name</TableHeadCell>
-      <TableHeadCell>Actions</TableHeadCell> <!-- Add a new column for the delete button -->
-    </TableHead>
-    <tbody>
-      {#each users as user}
-        <TableBodyRow>
-          <TableBodyCell>{user.email}</TableBodyCell>
-          <TableBodyCell>{user.firstName}</TableBodyCell>
-          <TableBodyCell>{user.lastName}</TableBodyCell>
-          <TableBodyCell>
-            <button class="button" on:click={() => deleteUser(user)}>Delete</button>
-          </TableBodyCell>
-        </TableBodyRow>
-      {/each}
-    </tbody>
-  </Table>
-  <button class="button" type="button" on:click={handleLogout}>Logout</button>
+ <div id="dataGrid"></div>
 </main>
+<button class="button" type="button" on:click={handleLogout}>Logout</button>
+
 
 <style>
-  .h2 {
-    margin-left: 600px;
-    margin-top: 50px;
-    font-weight: bold;
-    font-size: 50px;
-  }
-  .h1 {
-    margin-left: 10px;
-    margin-top: 30px;
-    font-weight: normal;
-    font-size: 20px;
-  }
-  .button {
-    background-color: #ed161a;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer;
-  }
+
+ .h1 {
+   margin-left: 10px;
+   margin-top: 30px;
+   font-weight: normal;
+   font-size: 20px;
+ }
+ .button {
+   margin-left: 10px;
+   margin-top: -50px;
+   background-color: #ed161a;
+   color: white;
+   padding: 10px 15px;
+   border: none;
+   cursor: pointer;
+ }
 </style>
