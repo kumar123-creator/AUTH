@@ -43,7 +43,8 @@
           firstname: user.firstName,
           lastName: user.lastName,
         };
-        users = [...users, userData];
+        // Prepend the new user data to the users array
+        users = [userData, ...users];
       } else {
         console.log('User is signed out');
       }
@@ -93,7 +94,7 @@
 <style>
   .h2 {
     margin-left: 600px;
-    margin-top: 205px;
+    margin-top: 50px;
     font-weight: bold;
     font-size: 50px;
   }
