@@ -161,10 +161,7 @@ async function deleteCandidate(candidate) {
   candidateToDelete = candidate;
   isDeleteConfirmPopupOpen = true;
 }
- let email = ''; // Define email in a scope accessible to the entire script
- 
-
-
+ let email = ''; 
  let isBlue = true; 
 
  onMount(() => {
@@ -199,7 +196,7 @@ async function deleteCandidate(candidate) {
 
 </script>
 
-<h1 class="h1" style="color: black;">You have successfully login  into your account.</h1>
+<h1 class="h1" style="color: black; margin-left: 300px;">You have successfully login  into your account.Candidates list is given below:</h1>
 <main>
   <h2 class="table-heading">CANDIDATE LIST</h2>
   <button class="add-button" on:click={() => openAddPopup()}>Add Candidate</button>
@@ -324,12 +321,12 @@ async function deleteCandidate(candidate) {
    margin-left: 10px;
    margin-top: 30px;
    font-weight: normal;
-   font-size: 20px;
+   font-size: 30px;
  }
  .button {
    margin-left: 10px;
    margin-top: -50px;
-   background-color: blue;
+   background-color: darkred;
    color: white;
    padding: 10px 15px;
    border: none;

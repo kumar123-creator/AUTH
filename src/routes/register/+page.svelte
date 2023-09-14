@@ -49,7 +49,7 @@
       // Set the data in the database
       set(usersRef, newUser);
 
-      goto('/information', {
+      goto('/Success Page', {
         state: {
           registeredEmail,
           registeredPassword,
@@ -57,8 +57,8 @@
       });
 
       console.log("User signed up successfully!");
-      console.log("First Name:", firstName);
-      console.log("Last Name:", lastName);
+      console.log("Full Name:", fullName);
+      
     } catch (error) {
       console.error("Error signing up:", error.message);
     }

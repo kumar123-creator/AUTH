@@ -14,7 +14,7 @@
       await signInWithEmailAndPassword(auth, email, password);
       errorMessage = "";
       // Navigate to the /Welcomepage route after successful login
-      goto('/Welcomepage');
+      goto('/Home Page');
     } catch (error) {
       // Display error message if login fails
       errorMessage = "Invalid username or password.";
