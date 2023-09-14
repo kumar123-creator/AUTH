@@ -114,7 +114,7 @@
     </div>
   </form>
   <div class="login-link">
-    <p>Already Registered?<a href="/">Login page</a>.</p>
+    <p>Already Registered?<a href="/">Login </a>.</p>
   </div>
 </div>
 
