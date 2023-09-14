@@ -15,8 +15,8 @@
 </script>
 
 
-<h1 class="h1" style="color: darkgreen;" > you have successfully sign in into Your account.Please goto Login page.</h1>
-<a href="/" style="color: blue;  font-weight: bold; font-size:18px; " class="h2">Login</a>
+<h1 class="h1" style="color: darkgreen;" >Successfully signed in into Your account.</h1>
+<a href="/" style="color: blue;  font-weight: bold; font-size:20px; " class="h2">Login</a>
 
 <style>
   .h2 {

@@ -185,7 +185,7 @@
   }
 
   button {
-    background-color: #04AA6D;
+    background-color: blue;
     color: white;
     padding: 14px 20px;
     border: none;
