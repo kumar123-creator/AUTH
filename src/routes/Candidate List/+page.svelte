@@ -199,7 +199,7 @@ async function deleteCandidate(candidate) {
 
 </script>
 
-<h1 class="h1" style="color: black;">You have successfully sign in  into your account.</h1>
+<h1 class="h1" style="color: black;">You have successfully login  into your account.</h1>
 <main>
   <h2 class="table-heading">CANDIDATE LIST</h2>
   <button class="add-button" on:click={() => openAddPopup()}>Add Candidate</button>
