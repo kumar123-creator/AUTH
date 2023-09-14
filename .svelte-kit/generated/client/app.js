@@ -13,9 +13,9 @@ export const server_loads = [];
 
 export const dictionary = {
 		"/": [2],
-		"/Welcomepage": [5],
-		"/information": [3],
-		"/register": [4]
+		"/Candidate List": [3],
+		"/Registration": [4],
+		"/Success Page": [5]
 	};
 
 export const hooks = {
