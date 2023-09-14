@@ -4,20 +4,16 @@
   import { Input, Label } from 'flowbite-svelte';
   import { goto } from '$app/navigation';
 
-   export let email = "";
-   export let password = "";
-   export let errorMessage = ""; 
-   let showPassword = false; // Track whether to show the password
+  export let email = "";
+  export let password = "";
+  export let errorMessage = "";
+  let showPassword = false; // Track whether to show the password
 
   async function handleSubmit() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-
-      
-
       errorMessage = "";
-    
-      // Navigate to the /information route after successful login
+      // Navigate to the /Welcomepage route after successful login
       goto('/Welcomepage');
     } catch (error) {
       // Display error message if login fails
@@ -26,82 +22,63 @@
     }
   }
 
-  const handleclick = () => {
-    // Only allow clicking when there are no errors
-   handleSubmit();
-    
-  }
   const togglePasswordVisibility = () => {
     // Toggle the password visibility
     showPassword = !showPassword;
   }
 </script>
 
-<h1 style="color: blue;" class="h1">Login form</h1>
-<form on:submit={handleSubmit} class="container">
-  <div class="imgcontainer">
-    <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="Avatar" class="avatar">
-  </div>
- 
-  <div class="mb-6">
-    <Label for="email" class="form-label">Email:</Label>
-    <Input type="email" bind:value={email} required id="email" class="form-input" placeholder="Enter Email"  />
-  </div>
-
- 
+<div class="login-container">
+  <h1 class="login-title">Login</h1>
+  <form on:submit={handleSubmit} class="login-form">
+    <div class="imgcontainer">
+      <img src="https://static.vecteezy.com/system/resources/thumbnails/007/033/146/small/profile-icon-login-head-icon-vector.jpg" alt="Avatar" class="avatar">
+    </div>
   
-<div class="mb-6">
-  <div class="password-container">
-    <Label for="password" class="form-label">Password:</Label>
-    <Input
-      type={showPassword ? "text" : "password"} 
-      bind:value={password}
-      required
-      id="password"
-      placeholder="Enter Password"
-      class="form-input"
-    />
-    <label class="password-toggle">
-      <input
-        type="checkbox"
-        checked={showPassword}
-        on:change={togglePasswordVisibility}
-      />
-      Show Password
-    </label>
-  </div>
-</div>
-  
-   {#if errorMessage}
-  <p style="color: red;">{errorMessage}</p>
-  {/if}
-
-  <div class="mb-6" >
-    <button type="button" on:click={handleclick} >Login</button>
-  </div>
-
-  <div class="mb-6" >
-     <p>Please click on Register to create new account.</p>
-     <a href="/register" style="color: blue;  font-weight: bold; font-size:18px; ">New User?Register</a>
+    <div class="form-group">
+      <Label for="email" class="form-label">Email:</Label>
+      <Input type="email" bind:value={email} required id="email" class="form-input" placeholder="Enter Email" />
     </div>
 
+    <div class="form-group">
+      <Label for="password" class="form-label">Password:</Label>
+      <Input
+        type={showPassword ? "text" : "password"}
+        bind:value={password}
+        required
+        id="password"
+        placeholder="Enter Password"
+        class="form-input"
+      />
+    </div>
 
+    <div class="form-group">
+      <label class="password-toggle">
+        <input
+          type="checkbox"
+          checked={showPassword}
+          on:change={togglePasswordVisibility}
+        />
+        Show Password
+      </label>
+    </div>
+
+    {#if errorMessage}
+    <p class="error-message">{errorMessage}</p>
+    {/if}
+
+    <div class="form-group">
+      <button type="button" on:click={handleSubmit}>Login</button>
+    </div>
   </form>
 
+  <div class="register-link">
+    <p>Don't have an account? <a href="/register">Register here</a></p>
+  </div>
+</div>
+
 <style>
-  .h1{
-    margin-left: 500px;
-    margin-top: 35px;
-    font-weight: bold;
-    font-size:30px;
-  }
-
-
-	.mb-6 {
- 
-   border-radius: 1.25rem; 
-}
-.imgcontainer {
+  .imgcontainer {
   text-align: center;
   margin: 24px 0 12px 0;
 }
@@ -111,26 +88,78 @@ img.avatar {
   width: 40%;
   border-radius: 50%;
 }
-.container {
-  padding: 16px;
-  width: 500px;
-  background-color: rgb(238, 240, 234);
-  margin-left:500px;
-  margin-top: 30px;
-}
-button {
-  background-color: #04AA6D;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-}
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
 
-button:hover {
-  opacity: 0.8;
-}
+  .login-title {
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: dark;
+  }
 
-	
-  </style>
+  .login-form {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    font-weight: bold;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+  }
+
+  .password-toggle {
+    display: flex;
+    align-items: center;
+  }
+
+  .error-message {
+    color: red;
+  }
+
+  .register-link {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .register-link a {
+    color: blue;
+    font-weight: bold;
+  }
+
+  button {
+    background-color: blue;
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+  }
+
+  button:hover {
+    background-color: darkblue;
+  }
+</style>

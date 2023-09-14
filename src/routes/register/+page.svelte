@@ -1,15 +1,13 @@
-
 <script>
-  import { auth } from '$lib/firebase/firebase.js';
+  import { Input, Label } from 'flowbite-svelte';
   import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
-  import { Input, Label, Helper } from 'flowbite-svelte';
+  import { auth } from '$lib/firebase/firebase.js';
   import { goto } from '$app/navigation';
-  import { getDatabase, ref, set } from 'firebase/database'; // Import set function from Firebase Realtime Database
+  import { getDatabase, ref, set } from 'firebase/database'; 
 
   let email = "";
   let password = "";
-  let firstName = "";
-  let lastName = "";
+  let fullName = "";
   let errorMessage = "";
   let showPassword = false; // Track whether to show the password
 
@@ -44,8 +42,8 @@
       const newUser = {
         email: registeredEmail,
         password: registeredPassword,
-        firstName,
-        lastName,
+        fullName,
+       
       };
 
       // Set the data in the database
@@ -77,101 +75,127 @@
   }
 </script>
 
-
-<h1  style="color: blue;" class="h1" >Sign Up</h1>
-<p class="p1" >Please fill in this form to create an account.</p>
-
-<form on:submit={handleSubmit}  class="container">
- <div class="mb-6">
-   <Label for="firstname" class="form-label">Firstname:</Label>
-   <Input type="text" bind:value={firstName} required id="email" placeholder="FirstName" class="form-input"  />
- </div>
- <div class="mb-6">
-   <Label for="lastName" class="form-label">Lastname:</Label>
-   <Input type="text" bind:value={lastName} required id="lastName" placeholder="LastName" class="form-input"  />
- </div>
- <div class="mb-6">
-   <Label for="email" class="form-label">Email:</Label>
-   <Input type="email" bind:value={email} required id="email" placeholder="Enter Email" class="form-input" />
- </div>
- {#if errorMessage}
- <p style="color: red;">{errorMessage}</p>
- {/if}
-
- <div class="mb-6">
-   <div class="password-container">
-     <Label for="password" class="form-label">Password:</Label>
-     <Input
-       type={showPassword ? "text" : "password"} 
-       bind:value={password}
-       required
-       id="password"
-       placeholder=" Password should be atleast 6 characters"
-       class="form-input"
-     />
-     <label class="password-toggle">
-       <input
-         type="checkbox"
-         checked={showPassword}
-         on:change={togglePasswordVisibility}
-       />
-       Show Password
-     </label>
-   </div>
- </div>
- <div>
-   <button  type="button" on:click={handleclick} >Signup</button>
- </div>
-
- <div class="mb-6" >
-   <p>If already Register go back to Login page.</p>
-   <a href="/" style="color: blue;  font-weight: bold; font-size:18px; ">Login</a>
+<div class="signup-container">
+  <h1 class="signup-title">Sign Up</h1>
+  <form on:submit={handleSubmit} class="signup-form">
+    <div class="form-group">
+      <Label for="firstname" class="form-label"> Name:</Label>
+      <Input type="text" bind:value={fullName} required id="firstname" placeholder="Full Name" class="form-input" />
+    </div>
+    
+    <div class="form-group">
+      <Label for="email" class="form-label">Email:</Label>
+      <Input type="email" bind:value={email} required id="email" placeholder="Enter Email" class="form-input" />
+    </div>
+    <div class="form-group">
+      <Label for="password" class="form-label">Password:</Label>
+      <Input
+        type={showPassword ? "text" : "password"} 
+        bind:value={password}
+        required
+        id="password"
+        placeholder="Password should be at least 6 characters"
+        class="form-input"
+      />
+      <label class="password-toggle">
+        <input
+          type="checkbox"
+          checked={showPassword}
+          on:change={togglePasswordVisibility}
+        />
+        Show Password
+      </label>
+    </div>
+    {#if errorMessage}
+    <p class="error-message">{errorMessage}</p>
+    {/if}
+    <div class="form-group">
+      <button type="button" on:click={handleclick}>Sign Up</button>
+    </div>
+  </form>
+  <div class="login-link">
+    <p>Already Registered?<a href="/">Login page</a>.</p>
   </div>
-</form>
-
+</div>
 
 <style>
-.container {
- padding: 16px;
- width: 500px;
- height: 500px;
- background-color: rgb(238, 240, 234);
- margin-left:500px;
- margin-top: 35px;
+  .signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
 
-}
-.h1{
-   margin-left: 500px;
-   margin-top: 35px;
-   font-weight: bold;
-   font-size:30px;
- }
- .p1{
-   margin-left: 500px;
-   font-weight:500;
-  
-   font-size:20px;
- }
+  .signup-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
 
+  .signup-description {
+    margin-bottom: 20px;
+    font-weight: 500;
+    font-size: 20px;
+  }
 
- .mb-6 {
+  .signup-form {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
 
-  border-radius: 1.25rem; 
- }
+  .form-group {
+    margin-bottom: 20px;
+  }
 
- 
-button {
- background-color: #04AA6D;
- color: white;
- padding: 14px 20px;
- margin: 8px 0;
- border: none;
- cursor: pointer;
- width: 100%;
-}
+  .form-label {
+    font-weight: bold;
+  }
 
-button:hover {
- opacity: 0.8;
-}
- 
- </style>
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+  }
+
+  .password-toggle {
+    display: flex;
+    align-items: center;
+  }
+
+  .error-message {
+    color: red;
+  }
+
+  .login-link {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .login-link a {
+    color: blue;
+    font-weight: bold;
+  }
+
+  button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+  }
+
+  button:hover {
+    background-color: #04995d;
+  }
+</style>
