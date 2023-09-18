@@ -134,12 +134,6 @@
     margin-bottom: 20px;
   }
 
-  .signup-description {
-    margin-bottom: 20px;
-    font-weight: 500;
-    font-size: 20px;
-  }
-
   .signup-form {
     width: 100%;
     max-width: 400px;
@@ -151,18 +145,6 @@
 
   .form-group {
     margin-bottom: 20px;
-  }
-
-  .form-label {
-    font-weight: bold;
-  }
-
-  .form-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    outline: none;
   }
 
   .password-toggle {
