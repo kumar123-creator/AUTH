@@ -118,7 +118,7 @@ function togglePopup() {
 <style>
    .card-container {
     margin-left: 200px;
-    margin-top: 20px;
+    margin-top: 50px;
    
   }
 
