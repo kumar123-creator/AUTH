@@ -76,17 +76,17 @@ function togglePopup() {
         <p class="font-normal text-gray-700 dark:text-gray-400 leading-tight" style="color: white ; ">£2,094,651</p>
         <p class="font-normal text-gray-700 dark:text-gray-400 leading-tight" style="color: white; font-size: 80%;">£511,219</p>
       </Card>
-      <Card class="small-card" style="width: 350px ; " >
+      <Card class="small-card" style="width: 350px ; background-color:ghostwhite; " >
         <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white" style="color: black ; ">Jobs On</h5>
         <p class="font-normal text-gray-700 dark:text-gray-400 leading-tight" style="color: black ; ">54</p>
         <p class="font-normal text-gray-700 dark:text-gray-400 leading-tight" style="color: black; font-size: 80%;">31</p>
       </Card>
-      <Card class="small-card" style="width: 350px ; " >
+      <Card class="small-card" style="width: 350px ; background-color:ghostwhite ;" >
         <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white" style="color: black ; ">Placements</h5>
         <p class="font-normal text-gray-700 dark:text-gray-400 leading-tight" style="color: black ; ">49</p>
         <p class="font-normal text-gray-700 dark:text-gray-400 leading-tight" style="color: black; font-size: 80%;">70</p>
       </Card>
-      <Card class="small-card" style="width: 350px ; " >
+      <Card class="small-card" style="width: 350px ; background-color:ghostwhite ; " >
         <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white" style="color: black ">Invoice Not Sent</h5>
         <p class="font-normal text-gray-700 dark:text-gray-400 leading-tight">£301,192</p>
       </Card>
@@ -99,12 +99,12 @@ function togglePopup() {
         <p class="font-normal text-gray-700 dark:text-gray-400 leading-tight" style="color: white;"  >£194,735</p>
         <p class="font-normal text-gray-700 dark:text-gray-400 leading-tight" style="color: white; font-size: 80%;">£3,390</p>
       </Card>
-      <Card class="small-card" style="width: 350px ; " >
+      <Card class="small-card" style="width: 350px ; background-color:ghostwhite ; " >
         <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white" style="color: black ; ">Interviews  </h5>
         <p class="font-normal text-gray-700 dark:text-gray-400 leading-tight">0</p>
         <p class="font-normal text-gray-700 dark:text-gray-400 leading-tight" style="color: black; font-size: 80%;">0</p>
       </Card>
-      <Card class="small-card" style="width: 350px ;" >
+      <Card class="small-card" style="width: 350px ; background-color:ghostwhite ;" >
         <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white" style="color: black ; ">CV Shares  </h5>
         <p class="font-normal text-gray-700 dark:text-gray-400 leading-tight" style="color:black; ">132</p>
         <p class="font-normal text-gray-700 dark:text-gray-400 leading-tight" style="color: black; font-size: 80%;">89</p>
