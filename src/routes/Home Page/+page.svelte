@@ -63,7 +63,7 @@ function togglePopup() {
       </div>
     </div>
   </div>
-  <h1 class="welcome-message">You have successfully logged into your account</h1>
+  <h1 class="welcome-message" style="font-size:larger; color:blue; font-weight:bold;">You have successfully logged into your account</h1>
   <div class="card-container">
     <div class="grid grid-cols-3 gap-4">
       <Card class="small-card" style="width: 350px ; background-color:darkblue "  >
@@ -177,12 +177,14 @@ function togglePopup() {
     text-align: center;
   }
 
-  .card-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    padding: 20px;
-  }
+
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center cards horizontally */
+  padding: 20px;
+}
 
   .popup {
     position: absolute;
