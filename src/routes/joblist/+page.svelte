@@ -54,9 +54,6 @@
       goto('/joblist');
     }
   
-    function business() {
-      goto('/business');
-    }
   </script>
   
   <main>
@@ -78,7 +75,6 @@
   
   <button class="candidatelist-button" type="button" on:click={candidatelist}>Candidates</button>
   <button class="joblist-button" type="button" on:click={joblist}>Jobs</button>
-  <button class="business-button" type="button" on:click={business}>BUSINESS PROFILE</button>
   <button class="button bottom-right" type="button" on:click={handleLogout}>Logout</button>
   
   <style global>
@@ -138,14 +134,7 @@
       border-radius: 4px;
       cursor: pointer;
     }
-    .business-button {
-    background-color: green;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer;
-    margin: 10px; /* Add some spacing around the buttons */
-  }
+
 
   </style>
   

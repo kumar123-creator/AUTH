@@ -62,7 +62,7 @@ function togglePopup() {
       </div>
     {/if}
   </div>
-  <h1 class="h1" style="color: black; margin-left: 300px;">You have successfully logged into your account</h1>
+  <h1 class="h1" style="color: black; margin-left: 400px;">You have successfully logged into your account</h1>
   <div class="card-container">
     <div class="grid grid-cols-3 gap-4">
       <Card class="small-card" style="width: 350px ; background-color:darkblue "  >
@@ -117,8 +117,8 @@ function togglePopup() {
 
 <style>
    .card-container {
-    margin-left: 250px;
-    margin-top: 200px;
+    margin-left: 200px;
+    margin-top: 20px;
    
   }
 
@@ -210,6 +210,7 @@ function togglePopup() {
 .popup-title {
   font-size: 20px;
   margin-bottom: 20px;
+  margin-right: 150px;
 }
 
 .close-button {

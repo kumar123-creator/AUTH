@@ -203,10 +203,7 @@ async function deleteCandidate(candidate) {
    function joblist() {
      goto('/joblist');
    }
-function business(){
-    goto('/business');
-}
- 
+
  </script>
  
  
@@ -330,7 +327,6 @@ function business(){
  
  <button class="candidatelist-button" type="button" on:click={candidatelist}>Candidates</button>
  <button class="joblist-button" type="button" on:click={joblist}>Jobs</button>
- <button class="business-button" type="button" on:click={business}>BUSINESS PROFILE</button>
  <button class="button bottom-right" type="button" on:click={handleLogout}>Logout</button>
  
  
