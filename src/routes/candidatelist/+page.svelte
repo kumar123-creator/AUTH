@@ -412,7 +412,8 @@ async function deleteCandidate(candidate) {
     position: absolute;
     top: 0;
     right: 0;
-    margin: 3px;
+    margin-right :10px;
+    margin-top: 80px;
     background-color: purple;
     color: white;
     border: none;
