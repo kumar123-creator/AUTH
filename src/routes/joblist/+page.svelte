@@ -86,7 +86,6 @@
           </div>
         </div>
       </div>
-    <h2 class="h2" style="color: darkgreen; margin-top:20px">JOBS LISTING</h2>
     {#if tableVisible}
       <Grid
         search

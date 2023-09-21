@@ -238,7 +238,7 @@ function togglePopup() {
           </div>
         </div>
       </div>
-   <h2 class="h2" style="color: darkred ; margin-top:20px">CANDIDATES LISTING</h2>
+   
    <button class="add-button" on:click={() => openAddPopup()}>Add Candidate</button>
   
    {#if isLoading}
@@ -363,11 +363,10 @@ function togglePopup() {
    }
  
   .add-button {
-    position: absolute;
     top: 0;
     right: 0;
-    margin-right :10px;
-    margin-top: 70px;
+    margin-left :1385px;
+    margin-top: 0px;
     background-color: purple;
     color: white;
     border: none;
