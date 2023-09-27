@@ -177,23 +177,15 @@ async function deleteCandidate(candidate) {
  
    // Function to handle logout
    function handleLogout() {
-     // Display a confirmation dialog
-     const confirmLogout = window.confirm("Are you sure you want to logout?");
-     
-     if (confirmLogout) {
-       // User confirmed, proceed with logout
-       // You can use your Firebase auth instance to sign the user out
-       // For example:
-       auth.signOut().then(() => {
-         // Handle successful logout, e.g., navigate to the /information page
-         console.log("User logged out");
-         goto('/'); // Navigate to the /information route
-       }).catch((error) => {
-         // Handle logout error, if any
-         console.error("Logout error:", error);
-       });
-     }
-   }
+  try {
+// Remove user data from localStorage
+localStorage.removeItem('user');
+// Redirect to the login page
+goto('/');
+} catch (error) {
+console.error("Error logging out:", error.message);
+}
+}
  
    function candidatelist() {
      goto('/candidatelist');
