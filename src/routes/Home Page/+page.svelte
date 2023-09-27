@@ -161,6 +161,19 @@ candidateToDelete = candidate;
 isDeleteConfirmPopupOpen = true;
 }
 
+let isAuthenticated = false; // Initialize a loading state
+
+//  if the user is authenticated when the component mounts
+onMount(async () => {
+  // Check if the user is authenticated
+if (auth.currentUser) {
+  isAuthenticated = true; // User is authenticated
+} else {
+  // If the user is not authenticated, redirect them to the login page
+  goto('/'); 
+}
+});
+
  let isBlue = true; 
 
  onMount(() => {
@@ -205,7 +218,7 @@ function togglePopup() {
     togglePopup(); // Close the popup after clicking "Business Profile"
   }
 </script>
-
+{#if isAuthenticated}
 <main>
   <div class="header">
     <div class="user-actions">
@@ -230,7 +243,7 @@ function togglePopup() {
         {/if}
       </div>
    
-  <h1 class="welcome-message" style="font-size:larger; color:blue; font-weight:bold;">You have successfully logged into your account</h1>
+
   <button class="add-button" on:click={() => openAddPopup()}>Add Candidate</button>
   
    {#if isLoading}
@@ -344,7 +357,7 @@ function togglePopup() {
  </div>
  {/if}
 </main>
-
+{/if}
 
 
 <style>
@@ -401,12 +414,6 @@ function togglePopup() {
     cursor: pointer;
     margin-right: 1100px;
     justify-content: center;
-  }
-
-  .welcome-message {
-    font-size: 24px;
-    margin: 20px 0;
-    text-align: center;
   }
 
   .popup {

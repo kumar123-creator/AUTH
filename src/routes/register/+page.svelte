@@ -11,6 +11,8 @@
   let errorMessage = "";
   let showPassword = false; // Track whether to show the password
 
+  
+
   async function handleSubmit() {
     try {
       // Check if the email is already in use

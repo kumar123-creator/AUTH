@@ -7,6 +7,19 @@
     let jsonData = [];
     let tableVisible = false;
     let isPopupVisible = false;
+
+    let isAuthenticated = false; // Initialize a loading state
+
+//  if the user is authenticated when the component mounts
+onMount(async () => {
+  // Check if the user is authenticated
+if (auth.currentUser) {
+  isAuthenticated = true; // User is authenticated
+} else {
+  // If the user is not authenticated, redirect them to the login page
+  goto('/'); 
+}
+});
   
     onMount(async () => {
       const response = await fetch("https://api.recruitly.io/api/job?apiKey=TEST64518616D4CF145D4E20BD47169EA7229BA3");
@@ -56,7 +69,7 @@ console.error("Error logging out:", error.message);
     togglePopup(); // Close the popup after clicking "Business Profile"
   }
   </script>
-  
+  {#if isAuthenticated}
   <main>
     <div class="header">
       <div class="user-actions">
@@ -94,7 +107,7 @@ console.error("Error logging out:", error.message);
         }))} />
     {/if}
   </main>
-
+{/if}
   
   <style global>
     @import "https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css";

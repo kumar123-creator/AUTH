@@ -22,6 +22,19 @@
    */
     let candidateToDelete = null;
     let isDeleteConfirmPopupOpen = false;
+
+    let isAuthenticated = false; // Initialize a loading state
+
+//  if the user is authenticated when the component mounts
+onMount(async () => {
+  // Check if the user is authenticated
+if (auth.currentUser) {
+  isAuthenticated = true; // User is authenticated
+} else {
+  // If the user is not authenticated, redirect them to the login page
+  goto('/'); 
+}
+});
   
   
     onMount(async () => {
@@ -206,8 +219,7 @@ function togglePopup() {
 
  </script>
  
- 
- 
+ {#if isAuthenticated} 
  <main >
   <div class="header">
     <div class="user-actions">
@@ -345,7 +357,7 @@ function togglePopup() {
  </div>
  {/if}
  </main>
- 
+ {/if}
 
  <style>
    .h2 {

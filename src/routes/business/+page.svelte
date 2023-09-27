@@ -1,5 +1,6 @@
 <script>
     import { onMount } from 'svelte';
+    import { auth } from '$lib/firebase/firebase.js';
     import { goto } from '$app/navigation';
     import { Input, Label, Select } from "flowbite-svelte";
     import 'flowbite/dist/flowbite.css';
@@ -289,7 +290,18 @@ onMount(() => {
   return () => clearInterval(interval);
 });
 
+let isAuthenticated = false; // Initialize a loading state
 
+//  if the user is authenticated when the component mounts
+onMount(async () => {
+  // Check if the user is authenticated
+if (auth.currentUser) {
+  isAuthenticated = true; // User is authenticated
+} else {
+  // If the user is not authenticated, redirect them to the login page
+  goto('/'); 
+}
+});
 
  let isPopupVisible = false;
  
@@ -428,11 +440,6 @@ function togglePopup() {
     justify-content: center;
   }
 
-  .welcome-message {
-    font-size: 24px;
-    margin: 20px 0;
-    text-align: center;
-  }
 
   .popup {
     position: absolute;
@@ -475,6 +482,7 @@ function togglePopup() {
     z-index: 998;
   }
   </style>
+  {#if isAuthenticated}
   <main class="container">
     <form class="form-container">
     <div class="grid gap-6 mb-6 md:grid-cols-1">
@@ -567,3 +575,4 @@ function togglePopup() {
     </div>
     </form>
     </main>
+    {/if}
