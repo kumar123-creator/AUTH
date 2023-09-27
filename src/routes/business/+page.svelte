@@ -1,5 +1,6 @@
 <script>
     import { onMount } from 'svelte';
+    import { goto } from '$app/navigation';
     import { Input, Label, Select } from "flowbite-svelte";
     import 'flowbite/dist/flowbite.css';
     import { MultiSelect } from 'flowbite-svelte';
