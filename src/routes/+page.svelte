@@ -1,31 +1,58 @@
 <script>
-  import { auth } from '$lib/firebase/firebase.js';
-  import { signInWithEmailAndPassword } from 'firebase/auth';
-  import { Input, Label } from 'flowbite-svelte';
-  import { goto } from '$app/navigation';
+ import { auth } from '$lib/firebase/firebase.js';
+	import { signInWithEmailAndPassword } from 'firebase/auth';
+	import { Input, Label } from 'flowbite-svelte';
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
+	
+  
+	export let email = "";
+	export let password = "";
+	export let errorMessage = ""; 
+	let user = null;
+	let showPassword = false; // Track whether to show the password
+  
 
-  export let email = "";
-  export let password = "";
-  export let errorMessage = "";
-  let showPassword = false; // Track whether to show the password
+	
 
-  async function handleSubmit() {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      errorMessage = "";
-      // Navigate to the /Welcomepage route after successful login
-      goto('/Home Page');
-    } catch (error) {
-      // Display error message if login fails
-      errorMessage = "Invalid username or password.";
-      console.error("Error logging in:", error.message);
+	// Check for and load session data when the component mounts
+	 onMount(() => {
+    const userData = localStorage.getItem('user');
+
+    if (userData) {
+      const user = JSON.parse(userData);
+      auth.currentUser = user;
+      goto('/Home Page'); // Navigate to the homepage if a user is already logged in
     }
-  }
+    // No user data found, do nothing (login page will be shown)
+  });
 
-  const togglePasswordVisibility = () => {
-    // Toggle the password visibility
-    showPassword = !showPassword;
-  }
+
+	async function handleSubmit() {
+	  try {
+		const userCredential = await signInWithEmailAndPassword(auth, email, password);
+		const user = userCredential.user;
+  
+		// Store user information in localStorage for persistent session
+		localStorage.setItem('user', JSON.stringify(user));
+  
+		errorMessage = "";
+  
+		// Navigate to the /Homepage route after successful login
+		goto('/Home Page');
+	  } catch (error) {
+		// Display error message if login fails
+		errorMessage = "Invalid username or password.";
+		console.error("Error logging in:", error.message);
+	  }
+	}
+
+  
+  
+	const togglePasswordVisibility = () => {
+	  // Toggle the password visibility
+	  showPassword = !showPassword;
+	}
 </script>
 
 <div class="login-container">
